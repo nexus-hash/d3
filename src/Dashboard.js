@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import data from './data';
+import data from './data/index2';
 import { Layout } from 'antd';
 import View1 from './views/View1';
 import View2 from './views/View2';
@@ -18,8 +18,9 @@ export default class Dashboard extends Component {
         this.state = {
             selectedUser: data[0],
             greaterThenAge: 0,
-            includedGender: ['Male', 'Female','Unknown'],
+            includedGender: "Active",
         }
+        console.log(data)
     }
 
     changeSelectUser = value => {
@@ -42,48 +43,52 @@ export default class Dashboard extends Component {
 
     render() {
         const {selectedUser, greaterThenAge, includedGender} = this.state;
-        const filteredData = data.filter(user=>includedGender.indexOf(user.gender)!==-1)
-                                 .filter(user=>user.age>greaterThenAge);
+        const dataBar = data
+        dataBar.forEach(function (d) {
+            console.log(includedGender)
+            if (includedGender === "Active") {
+              d.active = d.data[d.data.length - 1].active;
+              console.log(d.data[d.data.length - 1].active);
+            } else if (includedGender === "Deaths") {
+              d.active = d.data[d.data.length - 1].deaths;
+              console.log(d.data[d.data.length - 1].deaths);
+            }
+          });
+          console.log(dataBar)
         return (
-            <div>
-                <Layout style={{ height: 920 }}>
-                    <Sider width={300} style={{backgroundColor:'#eee'}}>
-                        <Content style={{ height: 200 }}>
-                            <View1 user={selectedUser}/>
-                        </Content>
-                        <Content style={{ height: 300 }}>
-                            <View2 data={filteredData}/>
-                        </Content>
-                        <Content style={{ height: 400 }}>
-                            <View3 
-                                changeGreaterThenAge={this.changeGreaterThenAge}
-                                changeIncludedGender={this.changeIncludedGender}
-                            />
-                        </Content>
-                    </Sider>
-                    <Layout>
-                        <Content style={{ height: 300 }}>
-                            <View4 user={selectedUser}/>
-                        </Content>
-                        <Layout style={{ height: 600 }}>
-                            <Content>
-                                <View5 data={filteredData}/>
-                            </Content>
-                            <Sider width={300} style={{backgroundColor:'#eee'}}>
-                                <View6 data={filteredData} changeSelectUser={this.changeSelectUser}/>
-                            </Sider>
-                        </Layout>
-                    </Layout>
+          <div>
+            <Layout style={{ height: 920 }}>
+              <Sider width={300} style={{ backgroundColor: "#eee" }}>
+                <Content style={{ height: 200 }}>
+                  <View1 user={selectedUser} />
+                </Content>
+                <Sider width={300} style={{ backgroundColor: "#eee" }}>
+                  <View6 data={data} changeSelectUser={this.changeSelectUser} />
+                </Sider>
+              </Sider>
+              <Layout>
+                <Content style={{ height: 300 }}>
+                  <View4 user={selectedUser} />
+                </Content>
+                <Layout style={{ height: 600 }}>
+                  <Content>
+                    <View5 data={dataBar} filter={includedGender} />
+                  </Content>
+                  <Sider width={300} style={{ backgroundColor: "#eee" }}>
+                    <Content style={{ height: 300 }}>
+                      <View2 data={selectedUser} />
+                    </Content>
+                    <Content style={{ height: 400 }}>
+                      <View3
+                        changeGreaterThenAge={this.changeGreaterThenAge}
+                        changeIncludedGender={this.changeIncludedGender}
+                      />
+                    </Content>
+                  </Sider>
                 </Layout>
-                <Layout>
-                    <Footer style={{ height: 20 }}>
-                        <div style={{marginTop: -10}}>
-                            Source Code <a href='https://github.com/sdq/react-d3-dashboard'>https://github.com/sdq/react-d3-dashboard</a>;
-                            Author <a href='https://sdq.ai'>sdq</a>;
-                        </div>
-                    </Footer>
-                </Layout>
-            </div>
-        )
+              </Layout>
+            </Layout>
+          </div>
+        );
     }
 }

@@ -12,14 +12,16 @@ export default class View6 extends Component {
         const {data} = this.props;
         return (
             <div id='view6' className='pane'>
-                <div className='header'>User List</div>
+                <div className='header'>Country List</div>
                 <List
                     size="small"
                     bordered
                     dataSource={data}
-                    renderItem={user => <List.Item onClick = {() => this.selectUser(user)}>
+                    renderItem={user => <List.Item style={{
+                        "cursor":"pointer"
+                    }} onClick = {() => this.selectUser(user)}>
                         <div>
-                            {user.name + ':' + user.age}
+                            {user.country}
                         </div>
                     </List.Item>}
                 />
