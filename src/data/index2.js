@@ -35,6 +35,17 @@ var dataind = data_temp.map((item) => {
   }
 });
 dataind = dataind.filter((item) => item !== undefined);
+var datager = data_temp.map((item) => {
+  if (item.Country === "Germany") {
+    return {
+      date: item.Date,
+      deaths: item.Deaths,
+      confirmed: item.Confirmed,
+      active: item.Active,
+    };
+  }
+});
+datager = datager.filter((item) => item !== undefined);
 const data2 = [
   {
     country: "US",
@@ -47,6 +58,10 @@ const data2 = [
   {
     country: "India",
     data: dataind,
+  },
+  {
+    country: "German",
+    data: datager,
   },
 ];
 export default data2;
